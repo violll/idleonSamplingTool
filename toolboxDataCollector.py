@@ -11,7 +11,7 @@ class UserData():
 
         # character classes
         self.chars = {charNames[i]: self.toolboxKeys["classesKey"][str(self.userData['data']['CharacterClass_' + str(i)])] for i in range(len(charNames))}
-
+        print(self.chars)
         # 3d printer slots data
         printer = [d for d in eval(self.userData['data']['Print']) if type(d) != int and d != 'Blank']
         self.nPrinterSlots = len(printer)//len(charNames)
@@ -36,3 +36,5 @@ class UserData():
     def savePKL(self, obj, f):
         with open(f, 'wb') as output:
             pickle.dump(obj, output, pickle.HIGHEST_PROTOCOL)
+
+UserData()

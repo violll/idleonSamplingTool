@@ -1,12 +1,40 @@
 {
     "classesKey": {
-        "22": ["Siege Breaker", "Archer"],
-        "12": ["Divine Knight", "Warrior"],
-        "36": ["Bubo", "Mage"],
-        "10": ["Blood Barbarian", "Warrior"],
-        "25": ["Beastmaster", "Archer"],
-        "4": ["Voidwalker", "Beginner"],
-        "34": ["Elemental Sorcerer", "Mage"]
+        "22": {
+            "Elite Class": "Siege Breaker",
+            "Class": "Archer",
+            "SampleRole": "Catching"
+        },
+        "12": {
+            "Elite Class": "Divine Knight", 
+            "Class": "Warrior",
+            "SampleRole": "Mining"
+        },
+        "36": {
+            "Elite Class": "Bubonic Conjurer", 
+            "Class": "Mage",
+            "SampleRole": "Choppin"
+        },
+        "10": {
+            "Elite Class": "Barbarian", 
+            "Class": "Warrior",
+            "SampleRole": "Fishing"
+        },
+        "25": {
+            "Elite Class": "Beast Master", 
+            "Class": "Archer",
+            "SampleRole": "RefineryMobs"
+        },
+        "4": {
+            "Elite Class": "Voidwalker",
+            "Class": "Beginner",
+            "SampleRole": "VialMobs"
+        },
+        "34": {
+            "Elite Class": "Elemental Sorcerer",
+            "Class": "Mage",
+            "SampleRole": "Choppin"
+        }
     },
     "maxPrinterSlots": 10,
     "logsKey": {
