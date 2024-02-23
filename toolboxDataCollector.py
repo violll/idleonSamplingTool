@@ -1,7 +1,7 @@
 import json
 import pickle
 
-class userData():
+class UserData():
     def __init__(self) -> None:
         self.userData = json.load(open('data.json'))
         self.toolboxKeys = json.load(open('toolboxKeys.json'))
