@@ -7,14 +7,14 @@ class UserData():
         self.toolboxKeys = json.load(open('toolboxKeys.json'))
         
         # character names
-        self.charNames = self.userData['charNames']
+        charNames = self.userData['charNames']
 
         # character classes
-        self.charClasses = [self.toolboxKeys["classesKey"][str(self.userData['data']['CharacterClass_' + str(i)])] for i in range(len(self.charNames))]
+        self.chars = {charNames[i]: self.toolboxKeys["classesKey"][str(self.userData['data']['CharacterClass_' + str(i)])] for i in range(len(charNames))}
 
         # 3d printer slots data
         printer = [d for d in eval(self.userData['data']['Print']) if type(d) != int and d != 'Blank']
-        self.nPrinterSlots = len(printer)//len(self.charNames)
+        self.nPrinterSlots = len(printer)//len(charNames)
 
         # sampling resources available to the player based on what is in their inventory
         # assumes the inventory is autosorted 
