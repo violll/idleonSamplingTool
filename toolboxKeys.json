@@ -1,0 +1,59 @@
+{
+    "classesKey": {
+        "22": ["Siege Breaker", "Archer"],
+        "12": ["Divine Knight", "Warrior"],
+        "36": ["Bubo", "Mage"],
+        "10": ["Blood Barbarian", "Warrior"],
+        "25": ["Beastmaster", "Archer"],
+        "4": ["Voidwalker", "Beginner"],
+        "34": ["Elemental Sorcerer", "Mage"]
+    },
+    "maxPrinterSlots": 10,
+    "logsKey": {
+        "OakTree": "OakLogs",
+        "BirchTree": "BirchLogs",
+        "JungleTree": "JungleLogs",
+        "ForestTree": "ForestFibres",
+        "ToiletTree": "PottyRolls",
+        "PalmTree": "Tropilogs",
+        "StumpTree": "VeinyLogs",
+        "SaharanFoal": "TundraLogs",
+        "Tree7": "WispyLumber",
+        "AlienTree": "AlienHiveChunk",
+        "Tree8": "CubedLogs",
+        "Tree9": "MapleLogs",
+        "Tree11": "WillowLogs",
+        "Tree10": "Dandielogs",
+        "Tree12": "BambooLogs"
+    },
+    "bugsKey": {
+        "Bug1": "Fly",
+        "Bug2": "Butterfly",
+        "Bug3": "SentientCereal",
+        "Bug4": "Fruitfly",
+        "Bug5": "Mosquisnow",
+        "Bug6": "Flysicle",
+        "Bug7": "WorkerBee",
+        "Bug8": "Fairy",
+        "Bug9": "Scarab",
+        "Bug10": "DreamParticulate",
+        "Bug11": "DustMote",
+        "Bug12": "Ladybug",
+        "Bug13": "Firefly"
+    },
+    "fishKey": {
+        "Fish1": "Goldfish",
+        "Fish2": "HermitCan",
+        "Fish3": "Jellyfish",
+        "Fish4": "Bloach",
+        "Fish5": "Skelefish",
+        "Fish6": "SandShark",
+        "Fish7": "MantaRay",
+        "Fish8": "Kraken",
+        "Fish9": "Icefish",
+        "Fish10": "Shellfish",
+        "Fish11": "JumboShrimp",
+        "Fish12": "Caulifish",
+        "Fish13": "EquinoxFish"
+    }
+}
