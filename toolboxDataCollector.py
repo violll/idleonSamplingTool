@@ -30,7 +30,7 @@ class UserData():
         self.sample()
 
     def sample(self, vials=["HermitCan", "SporeCap", "MapleLogs", "SnakeSkin"]):
-        # add mats/mobs to assigned once they are checked off
+        # add mats to assigned once they are checked off
         assigned = set()
 
         # assign refinery
@@ -42,7 +42,7 @@ class UserData():
         ## refinery mats
         for mat in self.toolboxKeys["refineryMats"]: 
             matType = self.getMatType(mat)
-            char = [self.chars[char] for char in self.chars if self.chars[char]["SampleRole"] == matType and len(self.chars[char]["Samples"]) < self.nPrinterSlots][-1]
+            char = [self.chars[char] for char in self.chars if self.chars[char]["SampleRole"] == matType and len(self.chars[char]["Samples"]) < self.nPrinterSlots and mat not in self.chars[char]["Samples"]][-1]
             char["Samples"].append(mat)
 
             if mat not in vials and mat not in self.toolboxKeys["atomMatSources"]:
@@ -66,17 +66,14 @@ class UserData():
             
         # assign remaining resources
         for mat in [x for x in self.logs + self.ores + self.fish + self.bugs if x not in assigned]:
-            # print(mat)
             matType = self.getMatType(mat)
-            try: 
-                char = [self.chars[char] for char in self.chars if self.chars[char]["SampleRole"] == matType and len(self.chars[char]["Samples"]) < self.nPrinterSlots][-1]
-                # print(char)
-                if char != {}: char["Samples"].append(mat)
+            chars = [self.chars[char] for char in self.chars if self.chars[char]["SampleRole"] == matType and len(self.chars[char]["Samples"]) < self.nPrinterSlots and mat not in self.chars[char]["Samples"]]
+            if chars != []: 
+                chars[-1]["Samples"].append(mat)
                 assigned.add(mat)
-            except: 
-                continue
             
         # assign alchemy mats -- for hourly clicking or future vials
+        # perhaps if there are extra slots in one character and another full character could double up on something if a mat was moved, move it
         for mat in self.toolboxKeys["miscMats"]:
             matType = self.getMatType(mat)
             chars = [self.chars[char] for char in self.chars if matType in self.chars[char]["SampleRole"] and len(self.chars[char]["Samples"]) < self.nPrinterSlots and mat not in self.chars[char]["Samples"]]
@@ -84,7 +81,7 @@ class UserData():
 
             assigned.add(mat)
         
-        # checking
+        # checking data
         print(set(self.logs + self.ores + self.fish + self.bugs).difference(assigned))
         print(json.dumps(self.chars, indent=4))
         for char in self.chars: 
@@ -108,5 +105,3 @@ class UserData():
     def savePKL(self, obj, f):
         with open(f, 'wb') as output:
             pickle.dump(obj, output, pickle.HIGHEST_PROTOCOL)
-
-UserData()
