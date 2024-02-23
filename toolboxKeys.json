@@ -3,37 +3,44 @@
         "22": {
             "Elite Class": "Siege Breaker",
             "Class": "Archer",
-            "SampleRole": "Catching"
+            "SampleRole": "Catching",
+            "Samples": []
         },
         "12": {
             "Elite Class": "Divine Knight", 
             "Class": "Warrior",
-            "SampleRole": "Mining"
+            "SampleRole": "Mining",
+            "Samples": []
         },
         "36": {
             "Elite Class": "Bubonic Conjurer", 
             "Class": "Mage",
-            "SampleRole": "Choppin"
+            "SampleRole": "Choppin",
+            "Samples": []
         },
         "10": {
             "Elite Class": "Barbarian", 
             "Class": "Warrior",
-            "SampleRole": "Fishing"
+            "SampleRole": "Fishing",
+            "Samples": []
         },
         "25": {
             "Elite Class": "Beast Master", 
             "Class": "Archer",
-            "SampleRole": "RefineryMobs"
+            "SampleRole": "RefineryMobs",
+            "Samples": []
         },
         "4": {
             "Elite Class": "Voidwalker",
             "Class": "Beginner",
-            "SampleRole": "VialMobs"
+            "SampleRole": "VialMobs",
+            "Samples": []
         },
         "34": {
             "Elite Class": "Elemental Sorcerer",
             "Class": "Mage",
-            "SampleRole": "Choppin"
+            "SampleRole": "Choppin",
+            "Samples": []
         }
     },
     "maxPrinterSlots": 10,
@@ -83,5 +90,9 @@
         "Fish11": "JumboShrimp",
         "Fish12": "Caulifish",
         "Fish13": "EquinoxFish"
-    }
+    },
+    "refineryMobs": ["SporeCap", "BullfrogHorn", "PocketSand", "FloofPloof", "CrackedGlass", "ContactLense"],
+    "refineryMats": ["Fly", "SentientCereal", "Flysicle", "ForestFibres", "WispyLumber", "Goldfish", "Bloach", "Copper"],
+    "atomMatSources": ["OakLogs", "Copper"],
+    "miscMats": ["BirchLogs", "Plat", "SentientCereal", "Iron", "PottyRolls", "GlublinEar", "WillowLogs", "BeanSlices", "EquinoxFish", "BullfrogHorn", "RatsTail", "DreamParticulate", "MegalodonTooth", "DustMote"]
 }
