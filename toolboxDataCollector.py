@@ -27,17 +27,16 @@ class UserData():
         self.bugs = [self.toolboxKeys["bugsKey"][bug] for bug in storage if "Bug" in bug]
         self.fish = [self.toolboxKeys["fishKey"][fish] for fish in storage if "Fish" in fish and "Food" not in fish]
 
-        self.sample()
-
-    def sample(self, vials=["HermitCan", "SporeCap", "MapleLogs", "SnakeSkin"]):
+    def sample(self, vials, sampleRefineryMobs):
         # add mats to assigned once they are checked off
         assigned = set()
 
         # assign refinery
         ## refinery mobs
         ## assumes there is one character assigned to RefineryMobs and they have enough sample slots
-        char = [self.chars[char] for char in self.chars if self.chars[char]["SampleRole"] == "RefineryMobs"][0]
-        char["Samples"].extend(self.toolboxKeys["refineryMobs"])
+        if sampleRefineryMobs:
+            char = [self.chars[char] for char in self.chars if self.chars[char]["SampleRole"] == "RefineryMobs"][0]
+            char["Samples"].extend(self.toolboxKeys["refineryMobs"])
 
         ## refinery mats
         for mat in self.toolboxKeys["refineryMats"]: 
@@ -82,11 +81,12 @@ class UserData():
             assigned.add(mat)
         
         # checking data
-        print(set(self.logs + self.ores + self.fish + self.bugs).difference(assigned))
-        print(json.dumps(self.chars, indent=4))
-        for char in self.chars: 
-            if len(self.chars[char]["Samples"]) < self.nPrinterSlots:
-                print(char)
+        # print(set(self.logs + self.ores + self.fish + self.bugs).difference(assigned))
+        # print(json.dumps(self.chars, indent=4))
+        # for char in self.chars: 
+        #     if len(self.chars[char]["Samples"]) < self.nPrinterSlots:
+        #         print(char)
+        return self.chars
 
     def getMatType(self, mat):
         if mat in self.ores: return "Mining"

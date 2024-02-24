@@ -1,4 +1,5 @@
 from toolboxDataCollector import UserData as User
+import json
 
 class IdleonSamplingTool:
     def __init__(self) -> None:
@@ -7,6 +8,9 @@ class IdleonSamplingTool:
         # ask for refinery mobs and vial mats here
         self.refineryMobs = self.checkRefineryMobs()
         self.vialMats = self.getVialMats()
+        self.charSamples = user.sample(self.vialMats, self.refineryMobs)
+        
+        print(json.dumps(self.charSamples, indent=4))
     
     def checkRefineryMobs(self):
         refineryMobs = input("Would you like to sample mobs for refinery? (SporeCap, BullfrogHorn, PocketSand, FloofPloof, CrackedGlass, ContactLense)\n> ")
