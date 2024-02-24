@@ -72,7 +72,6 @@ class UserData():
                 assigned.add(mat)
             
         # assign alchemy mats -- for hourly clicking or future vials
-        # perhaps if there are extra slots in one character and another full character could double up on something if a mat was moved, move it
         for mat in self.toolboxKeys["miscMats"]:
             matType = self.getMatType(mat)
             chars = [self.chars[char] for char in self.chars if matType in self.chars[char]["SampleRole"] and len(self.chars[char]["Samples"]) < self.nPrinterSlots and mat not in self.chars[char]["Samples"]]
@@ -80,12 +79,6 @@ class UserData():
 
             assigned.add(mat)
         
-        # checking data
-        # print(set(self.logs + self.ores + self.fish + self.bugs).difference(assigned))
-        # print(json.dumps(self.chars, indent=4))
-        # for char in self.chars: 
-        #     if len(self.chars[char]["Samples"]) < self.nPrinterSlots:
-        #         print(char)
         return self.chars
 
     def getMatType(self, mat):
