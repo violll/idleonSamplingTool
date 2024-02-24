@@ -92,7 +92,7 @@
         "Fish13": "EquinoxFish"
     },
     "refineryMobs": ["SporeCap", "BullfrogHorn", "PocketSand", "FloofPloof", "CrackedGlass", "ContactLense"],
-    "refineryMats": ["Fly", "SentientCereal", "Flysicle", "ForestFibres", "WispyLumber", "Goldfish", "Bloach", "Copper"],
+    "refineryMats": ["Fly", "SentientCereal", "Flysicle", "ForestFibres", "WispyLumber", "Goldfish", "Bloach", "Copper", "Void"],
     "atomMatSources": ["OakLogs", "Copper"],
     "miscMats": ["BirchLogs", "Plat", "SentientCereal", "Iron", "PottyRolls", "GlublinEar", "WillowLogs", "BeanSlices", "EquinoxFish", "BullfrogHorn", "RatsTail", "DreamParticulate", "MegalodonTooth", "DustMote"]
 }
