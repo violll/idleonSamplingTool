@@ -100,12 +100,14 @@
         "all": {
             "Logs": ["BirchLogs", "JungleLogs", "PottyRolls", "TundraLogs", "OakLogs", "AlienHiveChunk", "EffervescentLogs", "BambooLogs", "WispyLumber", "Dandielogs", "ForestFibres", "VeinyLogs", "CubedLogs", "PottyRolls", "MapleLogs"],
             "Ore": ["Dementia", "Iron", "Copper", "Plat", "Void", "Gold"],
-            "Fish": ["Bloach", "Goldfish", "HermitCan", "Skelefish", "MantaRay", "Jellyfish"]
+            "Fish": ["Bloach", "Goldfish", "HermitCan", "Skelefish", "MantaRay", "Jellyfish"],
+            "Bugs": []
             },
         "linear": {
             "Logs": ["BirchLogs", "TundraLogs", "OakLogs"],
             "Ore": ["Iron", "Copper", "Gold"],
-            "Fish": ["Bloach"]
+            "Fish": ["Bloach"],
+            "Bugs": []
         }
     }
 }

@@ -27,6 +27,13 @@ class UserData():
         self.bugs = [self.toolboxKeys["bugsKey"][bug] for bug in storage if "Bug" in bug]
         self.fish = [self.toolboxKeys["fishKey"][fish] for fish in storage if "Fish" in fish and "Food" not in fish]
 
+        self.mats = {
+            "Mining": self.ores,
+            "Choppin": self.logs, 
+            "Catching": self.bugs,
+            "Fishing": self.bugs
+            }
+
     def sample(self, vials, sampleRefineryMobs):
         # add mats to assigned once they are checked off
         assigned = set()
@@ -47,37 +54,32 @@ class UserData():
             if mat not in vials and mat not in self.toolboxKeys["atomMatSources"]:
                 assigned.add(mat)
 
-        # assign atom generating mats
-        for mat in self.toolboxKeys["atomMatSources"]:
-            matType = self.getMatType(mat)
-            chars = [self.chars[char] for char in self.chars if self.chars[char]["SampleRole"] == matType and len(self.chars[char]["Samples"]) < self.nPrinterSlots and mat not in self.chars[char]["Samples"]]
-            for char in chars: char["Samples"].append(mat)
-
-            assigned.add(mat)
-                
-        # assign vials
-        for mat in vials:
-            matType = self.getMatType(mat)
-            chars = [self.chars[char] for char in self.chars if matType in self.chars[char]["SampleRole"] and len(self.chars[char]["Samples"]) < self.nPrinterSlots and mat not in self.chars[char]["Samples"]]
-            for char in chars: char["Samples"].append(mat)
-
-            assigned.add(mat)
+        # assign all sample mats
+        for matType in ["Mining", "Choppin", "Fishing", "Catching"]:
+            relevantChars = [self.chars[char] for char in self.chars if self.chars[char]["SampleRole"]] == matType
+            mats = self.mats[matType]
+            leftoverSlots = (len(relevantChars) * self.nPrinterSlots) % len(mats)
             
-        # assign remaining resources
-        for mat in [x for x in self.logs + self.ores + self.fish + self.bugs if x not in assigned]:
-            matType = self.getMatType(mat)
-            chars = [self.chars[char] for char in self.chars if self.chars[char]["SampleRole"] == matType and len(self.chars[char]["Samples"]) < self.nPrinterSlots and mat not in self.chars[char]["Samples"]]
-            if chars != []: 
-                chars[-1]["Samples"].append(mat)
-                assigned.add(mat)
+            # do something here -- figure out which samples to avoid
+            # assign atom mats first, then any vials, then hourlyclickmats
+            if leftoverSlots < 0: 
+                pass
             
-        # assign alchemy mats -- for hourly clicking or future vials
-        for mat in self.toolboxKeys["miscMats"]:
-            matType = self.getMatType(mat)
-            chars = [self.chars[char] for char in self.chars if matType in self.chars[char]["SampleRole"] and len(self.chars[char]["Samples"]) < self.nPrinterSlots and mat not in self.chars[char]["Samples"]]
-            for char in chars: char["Samples"].append(mat)
+            # assign leftover slots
+            while leftoverSlots > 0:
+                # atom source
+                # vials
+                pass
 
-            assigned.add(mat)
+            hourlyClickMats = self.toolboxKeys["hourlyClicks"]["all"][matType]
+
+            # assign mats used for hourly clicks
+            for mat in hourlyClickMats:
+                pass
+            
+            # assign remaining mats
+            for mat in mats:
+                pass
         
         return self.chars
 
