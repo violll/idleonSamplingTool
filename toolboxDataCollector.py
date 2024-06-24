@@ -62,33 +62,27 @@ class UserData():
             currVials = [mat for mat in vials if self.getMatType(mat) == matType]
             hourlyClickMats = self.toolboxKeys["hourlyClicks"]["all"][matType]
             
-            # no leftover slots: assign refinery, then atom mats, then any vials, then hourlyclickmats
+            # no leftover slots: assign refinery, atom mats, and vials
             if leftoverSlots < 0: 
                 refineryMats = [mat for mat in self.toolboxKeys["refineryMats"] if self.getMatType(mat) == matType and mat not in self.assigned]
                 self.assignK(relevantChars, refineryMats)
+                self.assignN(relevantChars, atomSources)
                 self.assignN(relevantChars, currVials)
-                self.assignN(relevantChars, hourlyClickMats)
-                self.assignN(relevantChars, mats)
             
-            # leftover slots
-            else:
-                # assign leftover slots
-                if leftoverSlots > 0:
-                    # atom source
-                    leftoverSlots = self.assignK(relevantChars, atomSources, leftoverSlots, len(relevantChars))
+            # assign leftover slots to atoms mats and vials
+            if leftoverSlots > 0:
+                leftoverSlots = self.assignK(relevantChars, atomSources, leftoverSlots, len(relevantChars))
+                leftoverSlots = self.assignK(relevantChars, currVials, leftoverSlots, len(relevantChars))
 
-                    # vials
-                    leftoverSlots = self.assignK(relevantChars, currVials, leftoverSlots, len(relevantChars))
+            # assign mats used for hourly clicks
+            self.assignN(relevantChars, hourlyClickMats)
+            
+            # assign remaining mats
+            self.assignN(relevantChars, mats)
 
-                # assign mats used for hourly clicks
-                self.assignN(relevantChars, hourlyClickMats)
-                
-                # assign remaining mats
-                self.assignN(relevantChars, mats)
-
-                # if there are still leftover slots available, fill in the blanks with extra mats that could be hourly clickable
-                if leftoverSlots > 0:
-                    self.assignN(relevantChars, hourlyClickMats, True)
+            # if there are still leftover slots available, fill in the blanks with extra mats that could be hourly clickable
+            if leftoverSlots > 0:
+                self.assignN(relevantChars, hourlyClickMats, True)
                         
         return self.chars
     
