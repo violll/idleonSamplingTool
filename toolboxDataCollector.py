@@ -32,28 +32,17 @@ class UserData():
             "Mining": self.ores,
             "Choppin": self.logs, 
             "Catching": self.bugs,
-            "Fishing": self.bugs
+            "Fishing": self.fish
             }
         
         # add mats to assigned once they are checked off
         self.assigned = set()
 
     def sample(self, vials, sampleRefineryMobs):
-        # assign refinery
-        ## refinery mobs
-        ## assumes there is one character assigned to RefineryMobs and they have enough sample slots
+        # assign mobs
         if sampleRefineryMobs:
             char = [self.chars[char] for char in self.chars if self.chars[char]["SampleRole"] == "RefineryMobs"][0]
             char["Samples"].extend(self.toolboxKeys["refineryMobs"])
-
-        ## refinery mats
-        # for mat in self.toolboxKeys["refineryMats"]: 
-        #     matType = self.getMatType(mat)
-        #     char = random.choice([self.chars[char] for char in self.chars if self.chars[char]["SampleRole"] == matType and len(self.chars[char]["Samples"]) < self.nPrinterSlots and mat not in self.chars[char]["Samples"]])
-        #     char["Samples"].append(mat)
-
-        #     if mat not in vials and mat not in self.toolboxKeys["atomMatSources"]:
-        #         assigned.add(mat)
 
         # assign all sample mats
         for matType in ["Mining", "Choppin", "Fishing", "Catching"]:
@@ -68,34 +57,37 @@ class UserData():
             currVials = [mat for mat in vials if self.getMatType(mat) == matType]
             hourlyClickMats = self.toolboxKeys["hourlyClicks"]["all"][matType]
             
-            # do something here -- figure out which samples to avoid
-            # assign atom mats first, then any vials, then hourlyclickmats
+            # no leftover slots: assign refinery, then atom mats, then any vials, then hourlyclickmats
             if leftoverSlots < 0: 
-                pass
+                refineryMats = [mat for mat in self.toolboxKeys["refineryMats"] if self.getMatType(mat) == matType and mat not in self.assigned]
+                self.assignK(relevantChars, refineryMats)
+                self.assignN(relevantChars, [mat for mat in currVials if mat not in self.assigned])
+                self.assignN(relevantChars, [mat for mat in hourlyClickMats if mat not in self.assigned])
+                self.assignN(relevantChars, [mat for mat in mats if mat not in self.assigned])
             
-            # assign leftover slots
-            if leftoverSlots > 0:
-                # atom source
-                leftoverSlots = self.assignN(relevantChars, atomSources, leftoverSlots, len(relevantChars))
+            # leftover slots
+            else:
+                # assign leftover slots
+                if leftoverSlots > 0:
+                    # atom source
+                    leftoverSlots = self.assignK(relevantChars, atomSources, leftoverSlots, len(relevantChars))
 
-                # vials
-                leftoverSlots = self.assignN(relevantChars, currVials, leftoverSlots, len(relevantChars))
+                    # vials
+                    leftoverSlots = self.assignK(relevantChars, currVials, leftoverSlots, len(relevantChars))
 
-                # TODO more slots available...
-                if leftoverSlots > 0: print("still {} more slots!".format(leftoverSlots))
+                    # TODO more slots available...
+                    if leftoverSlots > 0: print("still {} more slots!".format(leftoverSlots))
 
-            # assign mats used for hourly clicks
-            for mat in hourlyClickMats:
-                if mat not in self.assigned: self.assignN([char for char in relevantChars if len(char["Samples"]) < self.nPrinterSlots], [mat])
-            
-            # assign remaining mats
-            for mat in mats:
-                if mat not in self.assigned: 
-                    self.assignN([char for char in relevantChars if len(char["Samples"]) < self.nPrinterSlots], [mat])
+                # assign mats used for hourly clicks
+                self.assignN(relevantChars, [mat for mat in hourlyClickMats if mat not in self.assigned])
+                
+                # assign remaining mats
+                self.assignN(relevantChars, [mat for mat in mats if mat not in self.assigned])
         
         return self.chars
     
-    def assignN(self, chars, mats, leftoverSlots=100000, k = 1):
+    # assigns each mat in mats to k characters, stops assigning when extra slots are gone
+    def assignK(self, chars, mats, leftoverSlots=100000, k = 1):
         for mat in mats:
             if leftoverSlots <= 0: break
             
@@ -106,6 +98,30 @@ class UserData():
                 else: self.assigned.add(mat)
 
         return leftoverSlots
+    
+    # assigns each mat in mats to one character until all slots are uniquely filled
+    def assignN(self, chars, mats):
+        for char in chars:
+            remainingSlots = self.nPrinterSlots - len(char["Samples"])
+
+            i = 0
+            while remainingSlots > 0:
+                if i >= len(mats): break
+
+                mat = mats[i]
+                char["Samples"].append(mat)
+                self.assigned.add(mat)
+                remainingSlots -= 1
+                i += 1
+
+        return
+        # for mat in mats:
+        #     if remainingSlots <= 0: break
+            
+        #     char = random.sample(chars, 1)
+        #     char["Samples"].append(mat)
+        #     self.assigned.add(mat)
+        #     remainingSlots -= 1
 
     def getMatType(self, mat):
         if mat in self.ores: return "Mining"
