@@ -1,6 +1,7 @@
 import json
 import pickle
 import copy
+import random
 
 class UserData():
     def __init__(self) -> None:
@@ -27,59 +28,94 @@ class UserData():
         self.bugs = [self.toolboxKeys["bugsKey"][bug] for bug in storage if "Bug" in bug]
         self.fish = [self.toolboxKeys["fishKey"][fish] for fish in storage if "Fish" in fish and "Food" not in fish]
 
-    def sample(self, vials, sampleRefineryMobs):
-        # add mats to assigned once they are checked off
-        assigned = set()
-
-        # assign refinery
-        ## refinery mobs
-        ## assumes there is one character assigned to RefineryMobs and they have enough sample slots
-        if sampleRefineryMobs:
-            char = [self.chars[char] for char in self.chars if self.chars[char]["SampleRole"] == "RefineryMobs"][0]
-            char["Samples"].extend(self.toolboxKeys["refineryMobs"])
-
-        ## refinery mats
-        for mat in self.toolboxKeys["refineryMats"]: 
-            matType = self.getMatType(mat)
-            char = [self.chars[char] for char in self.chars if self.chars[char]["SampleRole"] == matType and len(self.chars[char]["Samples"]) < self.nPrinterSlots and mat not in self.chars[char]["Samples"]][-1]
-            char["Samples"].append(mat)
-
-            if mat not in vials and mat not in self.toolboxKeys["atomMatSources"]:
-                assigned.add(mat)
-
-        # assign atom generating mats
-        for mat in self.toolboxKeys["atomMatSources"]:
-            matType = self.getMatType(mat)
-            chars = [self.chars[char] for char in self.chars if self.chars[char]["SampleRole"] == matType and len(self.chars[char]["Samples"]) < self.nPrinterSlots and mat not in self.chars[char]["Samples"]]
-            for char in chars: char["Samples"].append(mat)
-
-            assigned.add(mat)
-                
-        # assign vials
-        for mat in vials:
-            matType = self.getMatType(mat)
-            chars = [self.chars[char] for char in self.chars if matType in self.chars[char]["SampleRole"] and len(self.chars[char]["Samples"]) < self.nPrinterSlots and mat not in self.chars[char]["Samples"]]
-            for char in chars: char["Samples"].append(mat)
-
-            assigned.add(mat)
-            
-        # assign remaining resources
-        for mat in [x for x in self.logs + self.ores + self.fish + self.bugs if x not in assigned]:
-            matType = self.getMatType(mat)
-            chars = [self.chars[char] for char in self.chars if self.chars[char]["SampleRole"] == matType and len(self.chars[char]["Samples"]) < self.nPrinterSlots and mat not in self.chars[char]["Samples"]]
-            if chars != []: 
-                chars[-1]["Samples"].append(mat)
-                assigned.add(mat)
-            
-        # assign alchemy mats -- for hourly clicking or future vials
-        for mat in self.toolboxKeys["miscMats"]:
-            matType = self.getMatType(mat)
-            chars = [self.chars[char] for char in self.chars if matType in self.chars[char]["SampleRole"] and len(self.chars[char]["Samples"]) < self.nPrinterSlots and mat not in self.chars[char]["Samples"]]
-            for char in chars: char["Samples"].append(mat)
-
-            assigned.add(mat)
+        self.mats = {
+            "Mining": self.ores,
+            "Choppin": self.logs, 
+            "Catching": self.bugs,
+            "Fishing": self.fish
+            }
         
+        # add mats to assigned once they are fully assigned
+        self.assigned = set()
+
+    def sample(self, vials, sampleRefineryMobs):
+        # assign mobs
+        if sampleRefineryMobs:
+            refinaryChars = [self.chars[char] for char in self.chars if self.chars[char]["SampleRole"] == "RefineryMobs"]
+            self.assignN(refinaryChars, self.toolboxKeys["refineryMobs"])
+        
+        mobChars = [self.chars[char] for char in self.chars if "Mobs" in self.chars[char]["SampleRole"]]
+        mobVials = [mob for mob in vials if self.getMatType(mob) == "Mobs"]
+
+        self.assignN(mobChars, mobVials, True)
+
+        # assign all sample mats
+        for matType in ["Mining", "Choppin", "Fishing", "Catching"]:
+            relevantChars = [self.chars[char] for char in self.chars if self.chars[char]["SampleRole"] == matType]
+            mats = self.mats[matType]
+
+            # determine how many extra slots are available for doubling up on samples
+            if len(relevantChars) * self.nPrinterSlots < len(mats): leftoverSlots = -1
+            else: leftoverSlots = (len(relevantChars) * self.nPrinterSlots) % len(mats)
+
+            atomSources = [mat for mat in self.toolboxKeys["atomMatSources"] if self.getMatType(mat) == matType]
+            currVials = [mat for mat in vials if self.getMatType(mat) == matType]
+            hourlyClickMats = self.toolboxKeys["hourlyClicks"]["all"][matType]
+            
+            # no leftover slots: assign refinery, atom mats, and vials
+            if leftoverSlots < 0: 
+                refineryMats = [mat for mat in self.toolboxKeys["refineryMats"] if self.getMatType(mat) == matType and mat not in self.assigned]
+                self.assignK(relevantChars, refineryMats)
+                self.assignN(relevantChars, atomSources)
+                self.assignN(relevantChars, currVials)
+            
+            # assign leftover slots to atoms mats and vials
+            if leftoverSlots > 0:
+                leftoverSlots = self.assignK(relevantChars, atomSources, leftoverSlots, len(relevantChars))
+                leftoverSlots = self.assignK(relevantChars, currVials, leftoverSlots, len(relevantChars))
+
+            # assign mats used for hourly clicks
+            self.assignN(relevantChars, hourlyClickMats)
+            
+            # assign remaining mats
+            self.assignN(relevantChars, mats)
+
+            # if there are still leftover slots available, fill in the blanks with extra mats that could be hourly clickable
+            if leftoverSlots > 0:
+                self.assignN(relevantChars, hourlyClickMats, True)
+                        
         return self.chars
+    
+    # assigns each mat in mats to k characters, stops assigning when extra slots are gone
+    def assignK(self, chars, mats, leftoverSlots=100000, k = 1):
+        for mat in mats:
+            if leftoverSlots <= 0: break
+            
+            for char in random.sample(chars, k): 
+                if leftoverSlots <= 0: break
+                char["Samples"].append(mat)
+                if mat in self.assigned: leftoverSlots -= 1
+                else: self.assigned.add(mat)
+
+        return leftoverSlots
+    
+    # assigns each mat in mats to one character until all slots are uniquely filled
+    def assignN(self, chars, mats, ignoreAssigned = False):
+        for char in chars:
+            remainingSlots = self.nPrinterSlots - len(char["Samples"])
+
+            i = 0
+            while remainingSlots > 0:
+                if i >= len(mats): break
+
+                mat = mats[i]
+                if mat not in self.assigned or (ignoreAssigned and mat not in char["Samples"]):
+                    char["Samples"].append(mat)
+                    self.assigned.add(mat)
+                    remainingSlots -= 1
+                i += 1
+
+        return
 
     def getMatType(self, mat):
         if mat in self.ores: return "Mining"
