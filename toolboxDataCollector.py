@@ -35,14 +35,19 @@ class UserData():
             "Fishing": self.fish
             }
         
-        # add mats to assigned once they are checked off
+        # add mats to assigned once they are fully assigned
         self.assigned = set()
 
     def sample(self, vials, sampleRefineryMobs):
         # assign mobs
         if sampleRefineryMobs:
-            char = [self.chars[char] for char in self.chars if self.chars[char]["SampleRole"] == "RefineryMobs"][0]
-            char["Samples"].extend(self.toolboxKeys["refineryMobs"])
+            refinaryChars = [self.chars[char] for char in self.chars if self.chars[char]["SampleRole"] == "RefineryMobs"]
+            self.assignN(refinaryChars, self.toolboxKeys["refineryMobs"])
+        
+        mobChars = [self.chars[char] for char in self.chars if "Mobs" in self.chars[char]["SampleRole"]]
+        mobVials = [mob for mob in vials if self.getMatType(mob) == "Mobs"]
+
+        self.assignN(mobChars, mobVials)
 
         # assign all sample mats
         for matType in ["Mining", "Choppin", "Fishing", "Catching"]:
@@ -115,13 +120,6 @@ class UserData():
                 i += 1
 
         return
-        # for mat in mats:
-        #     if remainingSlots <= 0: break
-            
-        #     char = random.sample(chars, 1)
-        #     char["Samples"].append(mat)
-        #     self.assigned.add(mat)
-        #     remainingSlots -= 1
 
     def getMatType(self, mat):
         if mat in self.ores: return "Mining"
