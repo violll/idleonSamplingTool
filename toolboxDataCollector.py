@@ -66,9 +66,9 @@ class UserData():
             if leftoverSlots < 0: 
                 refineryMats = [mat for mat in self.toolboxKeys["refineryMats"] if self.getMatType(mat) == matType and mat not in self.assigned]
                 self.assignK(relevantChars, refineryMats)
-                self.assignN(relevantChars, [mat for mat in currVials if mat not in self.assigned])
-                self.assignN(relevantChars, [mat for mat in hourlyClickMats if mat not in self.assigned])
-                self.assignN(relevantChars, [mat for mat in mats if mat not in self.assigned])
+                self.assignN(relevantChars, currVials)
+                self.assignN(relevantChars, hourlyClickMats)
+                self.assignN(relevantChars, mats)
             
             # leftover slots
             else:
@@ -81,17 +81,15 @@ class UserData():
                     leftoverSlots = self.assignK(relevantChars, currVials, leftoverSlots, len(relevantChars))
 
                 # assign mats used for hourly clicks
-                self.assignN(relevantChars, [mat for mat in hourlyClickMats if mat not in self.assigned])
+                self.assignN(relevantChars, hourlyClickMats)
                 
                 # assign remaining mats
-                self.assignN(relevantChars, [mat for mat in mats if mat not in self.assigned])
+                self.assignN(relevantChars, mats)
 
                 # if there are still leftover slots available, fill in the blanks with extra mats that could be hourly clickable
                 if leftoverSlots > 0:
                     self.assignN(relevantChars, hourlyClickMats, True)
-                
-                if leftoverSlots > 0: print("still {} more slots for {}".format(leftoverSlots, matType))
-        
+                        
         return self.chars
     
     # assigns each mat in mats to k characters, stops assigning when extra slots are gone
