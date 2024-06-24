@@ -114,7 +114,7 @@ class UserData():
                 if i >= len(mats): break
 
                 mat = mats[i]
-                if mat not in self.assigned or ignoreAssigned:
+                if mat not in self.assigned or (ignoreAssigned and mat not in char["Samples"]):
                     char["Samples"].append(mat)
                     self.assigned.add(mat)
                     remainingSlots -= 1
