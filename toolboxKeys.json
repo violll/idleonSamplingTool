@@ -95,7 +95,6 @@
     "refineryMobs": ["SporeCap", "BullfrogHorn", "PocketSand", "FloofPloof", "CrackedGlass", "ContactLense"],
     "refineryMats": ["Fly", "SentientCereal", "Flysicle", "ForestFibres", "WispyLumber", "Goldfish", "Bloach", "Copper", "Void"],
     "atomMatSources": ["OakLogs", "Copper"],
-    "miscMats": ["BirchLogs", "Plat", "SentientCereal", "Iron", "PottyRolls", "GlublinEar", "WillowLogs", "BeanSlices", "EquinoxFish", "BullfrogHorn", "RatsTail", "DreamParticulate", "MegalodonTooth", "DustMote"],
     "hourlyClicks": {
         "all": {
             "Choppin": ["BirchLogs", "JungleLogs", "PottyRolls", "TundraLogs", "OakLogs", "AlienHiveChunk", "EffervescentLogs", "BambooLogs", "WispyLumber", "Dandielogs", "ForestFibres", "VeinyLogs", "CubedLogs", "PottyRolls", "MapleLogs"],
