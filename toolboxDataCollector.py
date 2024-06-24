@@ -56,9 +56,10 @@ class UserData():
 
         # assign all sample mats
         for matType in ["Mining", "Choppin", "Fishing", "Catching"]:
-            relevantChars = [self.chars[char] for char in self.chars if self.chars[char]["SampleRole"]] == matType
+            relevantChars = [self.chars[char] for char in self.chars if self.chars[char]["SampleRole"] == matType]
             mats = self.mats[matType]
-            leftoverSlots = (len(relevantChars) * self.nPrinterSlots) % len(mats)
+            if len(relevantChars) * self.nPrinterSlots < len(mats): leftoverSlots = -1
+            else: leftoverSlots = (len(relevantChars) * self.nPrinterSlots) % len(mats)
             
             # do something here -- figure out which samples to avoid
             # assign atom mats first, then any vials, then hourlyclickmats
