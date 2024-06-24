@@ -59,7 +59,8 @@
         "Tree9": "MapleLogs",
         "Tree11": "WillowLogs",
         "Tree10": "Dandielogs",
-        "Tree12": "BambooLogs"
+        "Tree12": "BambooLogs",
+        "Tree13": "EffervescentLogs"
     },
     "bugsKey": {
         "Bug1": "Fly",
@@ -94,5 +95,17 @@
     "refineryMobs": ["SporeCap", "BullfrogHorn", "PocketSand", "FloofPloof", "CrackedGlass", "ContactLense"],
     "refineryMats": ["Fly", "SentientCereal", "Flysicle", "ForestFibres", "WispyLumber", "Goldfish", "Bloach", "Copper", "Void"],
     "atomMatSources": ["OakLogs", "Copper"],
-    "miscMats": ["BirchLogs", "Plat", "SentientCereal", "Iron", "PottyRolls", "GlublinEar", "WillowLogs", "BeanSlices", "EquinoxFish", "BullfrogHorn", "RatsTail", "DreamParticulate", "MegalodonTooth", "DustMote"]
+    "miscMats": ["BirchLogs", "Plat", "SentientCereal", "Iron", "PottyRolls", "GlublinEar", "WillowLogs", "BeanSlices", "EquinoxFish", "BullfrogHorn", "RatsTail", "DreamParticulate", "MegalodonTooth", "DustMote"],
+    "hourlyClicks": {
+        "all": {
+            "Logs": ["BirchLogs", "JungleLogs", "PottyRolls", "TundraLogs", "OakLogs", "AlienHiveChunk", "EffervescentLogs", "BambooLogs", "WispyLumber", "Dandielogs", "ForestFibres", "VeinyLogs", "CubedLogs", "PottyRolls", "MapleLogs"],
+            "Ore": ["Dementia", "Iron", "Copper", "Plat", "Void", "Gold"],
+            "Fish": ["Bloach", "Goldfish", "HermitCan", "Skelefish", "MantaRay", "Jellyfish"]
+            },
+        "linear": {
+            "Logs": ["BirchLogs", "TundraLogs", "OakLogs"],
+            "Ore": ["Iron", "Copper", "Gold"],
+            "Fish": ["Bloach"]
+        }
+    }
 }
