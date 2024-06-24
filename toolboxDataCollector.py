@@ -1,6 +1,7 @@
 import json
 import pickle
 import copy
+import random
 
 class UserData():
     def __init__(self) -> None:
@@ -48,7 +49,7 @@ class UserData():
         ## refinery mats
         for mat in self.toolboxKeys["refineryMats"]: 
             matType = self.getMatType(mat)
-            char = [self.chars[char] for char in self.chars if self.chars[char]["SampleRole"] == matType and len(self.chars[char]["Samples"]) < self.nPrinterSlots and mat not in self.chars[char]["Samples"]][-1]
+            char = random.choice([self.chars[char] for char in self.chars if self.chars[char]["SampleRole"] == matType and len(self.chars[char]["Samples"]) < self.nPrinterSlots and mat not in self.chars[char]["Samples"]])
             char["Samples"].append(mat)
 
             if mat not in vials and mat not in self.toolboxKeys["atomMatSources"]:
