@@ -47,7 +47,7 @@ class UserData():
         mobChars = [self.chars[char] for char in self.chars if "Mobs" in self.chars[char]["SampleRole"]]
         mobVials = [mob for mob in vials if self.getMatType(mob) == "Mobs"]
 
-        self.assignN(mobChars, mobVials)
+        self.assignN(mobChars, mobVials, True)
 
         # assign all sample mats
         for matType in ["Mining", "Choppin", "Fishing", "Catching"]:
@@ -105,7 +105,7 @@ class UserData():
         return leftoverSlots
     
     # assigns each mat in mats to one character until all slots are uniquely filled
-    def assignN(self, chars, mats):
+    def assignN(self, chars, mats, ignoreAssigned = False):
         for char in chars:
             remainingSlots = self.nPrinterSlots - len(char["Samples"])
 
@@ -114,9 +114,10 @@ class UserData():
                 if i >= len(mats): break
 
                 mat = mats[i]
-                char["Samples"].append(mat)
-                self.assigned.add(mat)
-                remainingSlots -= 1
+                if mat not in self.assigned or ignoreAssigned:
+                    char["Samples"].append(mat)
+                    self.assigned.add(mat)
+                    remainingSlots -= 1
                 i += 1
 
         return
